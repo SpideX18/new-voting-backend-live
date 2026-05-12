@@ -7,17 +7,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
-SECRET_KEY = 'django-insecure-sm2c**c_i^4k0$tnztfy=8nk!%+$(_g_0r87sb%@7a9#lkf(5a'
+SECRET_KEY = config("SECRET_KEY")
 
-DEBUG = True
+DEBUG = config('DEBUG',default=False,cast=bool)
 
 # Allow your local network IP and localhost for mobile access
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.100']  # <-- Replace with your PC IP
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.18.61','10.10.8.138',]
-# Application definition
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='.onrender.com').split(',')# Application definition
 INSTALLED_APPS = [
+        'whitenoise.runserver_nostatic',   # add at top of list
     'django.contrib.admin',
     'django.contrib.auth',
+    
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -32,6 +33,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Must be first for CORS
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,10 +77,10 @@ WSGI_APPLICATION = 'voting_backend.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
+        conn_max_age=600,
+    )
 }
 
 MEDIA_URL = '/media/'
@@ -101,9 +104,8 @@ USE_TZ = True
 
 
 # Static files
-STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
