@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from decouple import config
 
 MEDIA_URL = '/media/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
