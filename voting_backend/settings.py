@@ -2,6 +2,10 @@ from pathlib import Path
 import os
 from decouple import config
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 MEDIA_URL = '/media/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +24,8 @@ INSTALLED_APPS = [
         'whitenoise.runserver_nostatic',   # add at top of list
     'django.contrib.admin',
     'django.contrib.auth',
-    
+    'cloudinary_storage',  
+    'cloudinary',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -112,3 +117,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+cloudinary.config(
+    cloud_name=config('dojpkrc1q', default=''),
+    api_key=config('929397431423256', default=''),
+    api_secret=config('9-PkTAcD0p6yhTAz9tTFvnnl_lQ', default=''),
+    secure=True
+)
+
+# Use Cloudinary for media files
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

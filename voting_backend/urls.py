@@ -28,7 +28,9 @@ urlpatterns = [
     path('api/', include('elections.urls')),
 ]
 
-# Serve media files in development
+# Media files now served by Cloudinary, but keep this for local dev
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Static files served by WhiteNoise
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
