@@ -12,6 +12,8 @@ from .serializers import (
 from blockchain import VoteBlockchain
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.conf import settings
+import cloudinary
 # from .models import VoteBlock
 # from .blockchain import VoteBlockchain
 import json
@@ -288,4 +290,37 @@ class BlockchainViewSet(viewsets.ViewSet):
         return Response({
             "chain_valid": valid,
             "message": "Blockchain integrity verified." if valid else "WARNING: Chain tampered!"
+        })
+
+def test_cloudinary(request):
+    """Temporary endpoint to test Cloudinary"""
+    try:
+        # Check config
+        config_check = {
+            'storage': settings.DEFAULT_FILE_STORAGE,
+            'cloud_name': cloudinary.config().cloud_name,
+            'api_key_set': bool(cloudinary.config().api_key),
+            'media_url': settings.MEDIA_URL,
+        }
+        
+        # Try test upload
+        result = cloudinary.uploader.upload(
+            "https://via.placeholder.com/100",
+            folder="test"
+        )
+        
+        # Cleanup
+        cloudinary.uploader.destroy(result['public_id'])
+        
+        return JsonResponse({
+            'status': 'success',
+            'config': config_check,
+            'test_upload': result['secure_url'],
+            'message': 'Cloudinary is working!'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'error': str(e),
+            'config': config_check
         })
