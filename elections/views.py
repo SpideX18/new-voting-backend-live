@@ -19,6 +19,21 @@ import cloudinary
 import json
 
 
+def debug_storage(request):
+    """Debug endpoint - remove after fixing"""
+    from elections.models import Candidate
+    
+    # Get a candidate with image
+    candidate = Candidate.objects.filter(profile_image__isnull=False).first()
+    
+    return JsonResponse({
+        'storage_backend': settings.DEFAULT_FILE_STORAGE,
+        'cloudinary_cloud': cloudinary.config().cloud_name,
+        'candidate_exists': candidate is not None,
+        'profile_image_field': str(candidate.profile_image) if candidate else None,
+        'profile_image_url': candidate.profile_image.url if candidate else None,
+        'profile_image_storage': type(candidate.profile_image.storage).__name__ if candidate else None,
+    })
 def add_vote(request):
     """Test route to add a vote block"""
     vote_data = {

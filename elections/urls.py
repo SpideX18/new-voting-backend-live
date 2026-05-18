@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
-from .views import CategoryViewSet, CandidateViewSet, VoteViewSet, ElectionResultViewSet, BlockchainViewSet, test_cloudinary
+from .views import CategoryViewSet, CandidateViewSet, VoteViewSet, ElectionResultViewSet, BlockchainViewSet, test_cloudinary, debug_storage
 from . import views
 
 
@@ -18,4 +18,5 @@ urlpatterns = [
     path('blocks/', views.view_blocks, name='view_blocks'),
     path('verify/', views.verify_chain, name='verify_chain'),
     path('test-cloudinary/', test_cloudinary),
+    path('debug-storage/', debug_storage),
 ]
