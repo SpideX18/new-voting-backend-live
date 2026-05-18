@@ -116,21 +116,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CLOUDINARY CONFIG - FIXED
 # ============================================
 
-# Option 1: Hardcoded (works but not recommended for security)
 cloudinary.config(
-    cloud_name='dojpkrc1q',
-    api_key='929397431423256',
-    api_secret='9-PkTAcD0p6yhTAz9tTFvnnl_lQ',
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET'),
     secure=True
 )
 
-# Option 2: From env vars (BETTER - uncomment and use this instead)
-# cloudinary.config(
-#     cloud_name=config('CLOUDINARY_CLOUD_NAME', default='dojpkrc1q'),
-#     api_key=config('CLOUDINARY_API_KEY', default='929397431423256'),
-#     api_secret=config('CLOUDINARY_API_SECRET', default='9-PkTAcD0p6yhTAz9tTFvnnl_lQ'),
-#     secure=True
-# )
-
-# Tell Django to use Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
